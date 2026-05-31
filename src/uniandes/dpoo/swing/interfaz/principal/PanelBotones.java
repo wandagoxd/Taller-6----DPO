@@ -8,8 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public class PanelBotones extends JPanel implements ActionListener
-{
+public class PanelBotones extends JPanel implements ActionListener {
     /**
      * El comando para el botón para crear un nuevo restaurante
      */
@@ -24,30 +23,31 @@ public class PanelBotones extends JPanel implements ActionListener
     private JButton butVerTodos;
     private VentanaPrincipal ventanaPrincipal;
 
-    public PanelBotones( VentanaPrincipal ventanaPrincipal )
-    {
+    public PanelBotones(VentanaPrincipal ventanaPrincipal) {
         this.ventanaPrincipal = ventanaPrincipal;
 
-        setLayout( new FlowLayout( ) );
+        setLayout(new FlowLayout());
 
         // Agrega el botón para crear un nuevo restaurante
-        // TODO completar
+        butNuevo = new JButton("Nuevo");
+        butNuevo.setActionCommand(NUEVO);
+        butNuevo.addActionListener(this);
+        add(butNuevo);
 
         // Agrega el botón para ver todos los restaurantes
-        // TODO completar
+        butVerTodos = new JButton("Ver todos");
+        butVerTodos.setActionCommand(VER);
+        butVerTodos.addActionListener(this);
+        add(butVerTodos);
     }
 
     @Override
-    public void actionPerformed( ActionEvent e )
-    {
-        String comando = e.getActionCommand( );
-        if( comando.equals( NUEVO ) )
-        {
-            ventanaPrincipal.mostrarVetanaNuevoRestaurante( );
-        }
-        else if( comando.equals( VER ) )
-        {
-            ventanaPrincipal.mostrarVentanaMapa( );
+    public void actionPerformed(ActionEvent e) {
+        String comando = e.getActionCommand();
+        if (comando.equals(NUEVO)) {
+            ventanaPrincipal.mostrarVetanaNuevoRestaurante();
+        } else if (comando.equals(VER)) {
+            ventanaPrincipal.mostrarVentanaMapa();
         }
     }
 }

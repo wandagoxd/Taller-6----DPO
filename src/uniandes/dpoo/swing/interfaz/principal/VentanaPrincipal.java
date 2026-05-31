@@ -11,20 +11,22 @@ import uniandes.dpoo.swing.mundo.Diario;
 import uniandes.dpoo.swing.mundo.Restaurante;
 
 @SuppressWarnings("serial")
-public class VentanaPrincipal extends JFrame
-{
+public class VentanaPrincipal extends JFrame {
     /**
-     * Es una referencia al diario en el que se registran las visitas a los restaurantes
+     * Es una referencia al diario en el que se registran las visitas a los
+     * restaurantes
      */
     private Diario mundo;
 
     /**
-     * El panel con los botones para crear un nuevo restaurante o para ver el mapa de restaurantes
+     * El panel con los botones para crear un nuevo restaurante o para ver el mapa
+     * de restaurantes
      */
     private PanelBotones pBotones;
 
     /**
-     * El panel donde se muestran los detalles del restaurante seleccionado actualmente
+     * El panel donde se muestran los detalles del restaurante seleccionado
+     * actualmente
      */
     private PanelDetallesRestaurante pDetalles;
 
@@ -39,113 +41,132 @@ public class VentanaPrincipal extends JFrame
     private VentanaMapa ventanaMapa;
 
     /**
-     * Una referencia a la ventana donde se agregan restaurantes, si ya se abrió alguna vez
+     * Una referencia a la ventana donde se agregan restaurantes, si ya se abrió
+     * alguna vez
      */
     private VentanaAgregarRestaurante ventanaAgregar;
 
-    public VentanaPrincipal( Diario elDiario )
-    {
+    public VentanaPrincipal(Diario elDiario) {
         this.mundo = elDiario;
-        setLayout( new BorderLayout( ) );
+        setLayout(new BorderLayout());
 
         // Configura los componentes de la ventana
-        pBotones = new PanelBotones( this );
-        add( pBotones, BorderLayout.NORTH );
+        pBotones = new PanelBotones(this);
+        add(pBotones, BorderLayout.NORTH);
 
-        pLista = new PanelLista( this );
-        add( pLista );
+        pLista = new PanelLista(this);
+        add(pLista);
 
-        pDetalles = new PanelDetallesRestaurante( );
-        add( pDetalles, BorderLayout.SOUTH );
+        pDetalles = new PanelDetallesRestaurante();
+        add(pDetalles, BorderLayout.SOUTH);
 
         // Actualiza los restaurantes que se muestran
-        actualizarRestaurantes( );
+        actualizarRestaurantes();
 
         // Termina de configurar la ventana
-        setTitle( "Restaurantes" );
-        setDefaultCloseOperation( EXIT_ON_CLOSE );
-        setSize( 400, 600 );
-        setLocationRelativeTo( null );
-        setVisible( true );
+        setTitle("Restaurantes");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(400, 600);
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 
     /**
      * Abre la ventana para agregar un nuevo restaurante, si no está abierta ya
      */
-    public void mostrarVetanaNuevoRestaurante( )
-    {
-        if( ventanaAgregar == null || !ventanaAgregar.isVisible( ) )
-        {
-            ventanaAgregar = new VentanaAgregarRestaurante( this );
-            ventanaAgregar.setVisible( true );
+    public void mostrarVetanaNuevoRestaurante() {
+        if (ventanaAgregar == null || !ventanaAgregar.isVisible()) {
+            ventanaAgregar = new VentanaAgregarRestaurante(this);
+            ventanaAgregar.setVisible(true);
         }
     }
 
     /**
      * Abre la ventana para mostrar el mapa de restaurante, si no está abierta ya
      */
-    public void mostrarVentanaMapa( )
-    {
-        // TODO completar mostrarVentanaMapa
+    public void mostrarVentanaMapa() {
+        if (ventanaMapa == null || !ventanaMapa.isVisible()) {
+            ventanaMapa = new VentanaMapa(this, getRestaurantes(true));
+            ventanaMapa.setVisible(true);
+        }
     }
 
     /**
-     * Agrega un nuevo restaurante al diario y actualiza la información que se muestra
-     * @param nombre El nombre del nuevo restaurante
+     * Agrega un nuevo restaurante al diario y actualiza la información que se
+     * muestra
+     * 
+     * @param nombre       El nombre del nuevo restaurante
      * @param calificacion La calificación del nuevo restaurante
-     * @param x La coordenada X del nuevo restaurante
-     * @param y La coordenada Y del nuevo restaurante
-     * @param visitado Indica si el nuevo restaurante ya fue visitado o no
+     * @param x            La coordenada X del nuevo restaurante
+     * @param y            La coordenada Y del nuevo restaurante
+     * @param visitado     Indica si el nuevo restaurante ya fue visitado o no
      */
-    public void agregarRestaurante( String nombre, int calificacion, int x, int y, boolean visitado )
-    {
-        // TODO completar agregarRestaurante
+    public void agregarRestaurante(String nombre, int calificacion, int x, int y, boolean visitado) {
+        // Crea la instancia del nuevo restaurante usando el modelo del mundo
+        Restaurante nuevo = new Restaurante(nombre, calificacion, x, y, visitado);
+
+        // Lo guarda en el diario lógico
+        mundo.agregarRestaurante(nuevo);
+
+        // Refresca la interfaz gráfica completa con el nuevo elemento
+        actualizarRestaurantes();
     }
 
     /**
      * Retorna una lista de los restaurantes.
+     * * Si se quieren todos los restaurantes, 'completos' debe ser verdadero. De lo
+     * contrario, se retornan sólo los visitados.
      * 
-     * Si se quieren todos los restaurantes, 'completos' debe ser verdadero. De lo contrario, se retornan sólo los visitados.
-     * @param completos Indica si se quieren todos los restaurantes o solo los ya visitados.
+     * @param completos Indica si se quieren todos los restaurantes o solo los ya
+     *                  visitados.
      * @return
      */
-    public List<Restaurante> getRestaurantes( boolean completos )
-    {
-        return mundo.getRestaurantes( completos );
+    public List<Restaurante> getRestaurantes(boolean completos) {
+        return mundo.getRestaurantes(completos);
     }
 
     /**
-     * Actualiza los restaurantes que se muestran en la lista y el restaurante seleccionado del cual se muestran los detalles
+     * Actualiza los restaurantes que se muestran en la lista y el restaurante
+     * seleccionado del cual se muestran los detalles
      */
-    private void actualizarRestaurantes( )
-    {
-        List<Restaurante> todos = this.mundo.getRestaurantes( true );
-        // TODO completar actualizarRestaurantes
+    private void actualizarRestaurantes() {
+        List<Restaurante> todos = this.mundo.getRestaurantes(true);
+
+        // Envía la lista de restaurantes actualizada al JList contenido en pLista
+        pLista.actualizarRestaurantes(todos);
+
+        // Si hay elementos en la lista, selecciona y muestra por defecto los detalles
+        // del primero
+        if (!todos.isEmpty()) {
+            cambiarRestauranteSeleccionado(todos.get(0));
+        }
     }
 
     /**
-     * Cambia el restaurante actualmente seleccionado (y mostrado) por el que se pasa por parámetro
+     * Cambia el restaurante actualmente seleccionado (y mostrado) por el que se
+     * pasa por parámetro
+     * 
      * @param seleccionado
      */
-    public void cambiarRestauranteSeleccionado( Restaurante seleccionado )
-    {
-        pDetalles.actualizarRestaurante( seleccionado );
+    public void cambiarRestauranteSeleccionado(Restaurante seleccionado) {
+        pDetalles.actualizarRestaurante(seleccionado);
     }
 
     /**
-     * Inicia la aplicación, creando un conjunto básico de restaurantes y luego creando la interfaz de la aplicación
+     * Inicia la aplicación, creando un conjunto básico de restaurantes y luego
+     * creando la interfaz de la aplicación
+     * 
      * @param args
      */
-    public static void main( String[] args )
-    {
-        Diario elDiario = new Diario( );
-        elDiario.agregarRestaurante( new Restaurante( "Pita Pan", 4, 30, 30, true ) );
-        elDiario.agregarRestaurante( new Restaurante( "Lord of the Wings", 5, 170, 210, true ) );
-        elDiario.agregarRestaurante( new Restaurante( "Nacho Business", 2, 350, 170, false ) );
-        elDiario.agregarRestaurante( new Restaurante( "Thai Tanic", 1, 110, 100, false ) );
-        elDiario.agregarRestaurante( new Restaurante( "Planet of the Creppes", 3, 400, 400, true ) );
+    public static void main(String[] args) {
+        Diario elDiario = new Diario();
+        elDiario.agregarRestaurante(new Restaurante("Pita Pan", 4, 30, 30, true));
+        elDiario.agregarRestaurante(new Restaurante("Lord of the Wings", 5, 170, 210, true));
+        elDiario.agregarRestaurante(new Restaurante("Nacho Business", 2, 350, 170, false));
+        elDiario.agregarRestaurante(new Restaurante("Thai Tanic", 1, 110, 100, false));
+        elDiario.agregarRestaurante(new Restaurante("Planet of the Creppes", 3, 400, 400, true));
 
-        new VentanaPrincipal( elDiario );
+        new VentanaPrincipal(elDiario);
     }
 
 }

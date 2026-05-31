@@ -14,10 +14,10 @@ import javax.swing.border.LineBorder;
 import uniandes.dpoo.swing.mundo.Restaurante;
 
 @SuppressWarnings("serial")
-public class PanelMapaVisualizar extends JPanel
-{
+public class PanelMapaVisualizar extends JPanel {
     /**
-     * La etiqueta donde se dibuja el mapa y se hacen las señales de los restaurantes
+     * La etiqueta donde se dibuja el mapa y se hacen las señales de los
+     * restaurantes
      */
     private JLabel labMapa;
 
@@ -26,37 +26,46 @@ public class PanelMapaVisualizar extends JPanel
      */
     private List<Restaurante> restaurantes;
 
-    public PanelMapaVisualizar( )
-    {
-        this.labMapa = new JLabel( new ImageIcon( "./imagenes/mapa.png" ) );
-        labMapa.setBorder( new LineBorder( Color.DARK_GRAY ) );
-        add( labMapa, BorderLayout.CENTER );
+    public PanelMapaVisualizar(List<Restaurante> iniciales) {
+        this.restaurantes = iniciales;
+        setLayout(new BorderLayout());
+        this.labMapa = new JLabel(new ImageIcon("./imagenes/mapa.png"));
+        labMapa.setBorder(new LineBorder(Color.DARK_GRAY));
+        add(labMapa, BorderLayout.CENTER);
     }
 
     @Override
-    public void paint( Graphics g )
-    {
-        super.paint( g );
-        Graphics2D g2d = ( Graphics2D )g;
+    public void paint(Graphics g) {
+        super.paint(g);
+        Graphics2D g2d = (Graphics2D) g;
 
-     // TODO completar y hacer que se vean los nombres de todos los restaurantes en el mapa
+        if (restaurantes != null) {
+            for (Restaurante r : restaurantes) {
+                int x = r.getX();
+                int y = r.getY();
+
+                g2d.setColor(Color.RED);
+                g2d.fillOval(x - 4, y - 4, 8, 8);
+
+                g2d.setColor(Color.BLACK);
+                g2d.drawString(r.getNombre(), x + 8, y + 4);
+            }
+        }
     }
 
     /**
-     * Actualiza la lista de restaurantes y llama al método repaint() para que se actualice el mapa
+     * Actualiza la lista de restaurantes y llama al método repaint() para que se
+     * actualice el mapa
+     * 
      * @param nuevosRestaurantes
      */
-    public void actualizarMapa( List<Restaurante> nuevosRestaurantes )
-    {
-        if( restaurantes != null )
-        {
-            this.restaurantes.clear( );
-            this.restaurantes.addAll( nuevosRestaurantes );
-        }
-        else
-        {
+    public void actualizarMapa(List<Restaurante> nuevosRestaurantes) {
+        if (restaurantes != null) {
+            this.restaurantes.clear();
+            this.restaurantes.addAll(nuevosRestaurantes);
+        } else {
             this.restaurantes = nuevosRestaurantes;
         }
-        repaint( );
+        repaint();
     }
 }

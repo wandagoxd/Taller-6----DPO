@@ -1,0 +1,4 @@
+Ejecute la clase Ventana Principal, quien tiene el método main. De allí, puede seguir las instrucciones de los profesores relativas al asunto.
+
+Juan Daniel Gonzalo López Pedraza 
+202514683
